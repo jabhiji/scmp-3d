@@ -4,9 +4,9 @@
 // light data is written in XDMF format
 // heavy data is written in HDF5 format
 
-void writeMesh(const int      NX, 
-               const int      NY, 
-               const int      NZ, 
+void writeMesh(const int      NX,
+               const int      NY,
+               const int      NZ,
                const int      time,
                const double*  rho)
 {
@@ -141,7 +141,7 @@ void writeMesh(const int      NX,
     XDMF << "            </DataItem>\n";
     XDMF << "        </Geometry>\n";
     XDMF << "        <Attribute Name=\"rho\" AttributeType=\"Scalar\" Center=\"Node\">\n";
-    XDMF << "            <DataItem Dimensions=\"" << NZ << " " << NY << " " << NX << "\" NumberType=\"Int\" Format=\"HDF\">\n";
+    XDMF << "            <DataItem Dimensions=\"" << NZ << " " << NY << " " << NX << "\" Precision=\" 8 \" Format=\"HDF\">\n";
     XDMF << "                " << "./hdf5/" << hdf5_file << ":/rho\n";
     XDMF << "            </DataItem>\n";
     XDMF << "        </Attribute>\n";

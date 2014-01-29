@@ -196,6 +196,8 @@
               u[N] = fex_sum / rho[N] + tau * dPdt_x[N] / rho[N];
               v[N] = fey_sum / rho[N] + tau * dPdt_y[N] / rho[N];
               w[N] = fez_sum / rho[N] + tau * dPdt_z[N] / rho[N];
+
+           // printf("rho = %f, u = %f, v = %f, w = %f\n",rho[N],u[N],v[N],w[N]);
             }
           }
         }
@@ -314,7 +316,7 @@
 
 //      LBM parameters
 
-        const double GEE11 = -0.45;   // interaction strength
+        const double GEE11 = -0.27;   // interaction strength
         const double tau = 1.0;       // relaxation time
         const double rhoAvg = 0.693;  // reference density value
 
@@ -367,7 +369,7 @@
 //      write initial condition to output files
         writeMesh(NX, NY, NZ, time, rho);
 
-        while(time < 1000)
+        while(time < 2000)
         {
           time++; // increment lattice time
 
@@ -389,7 +391,7 @@
 
 //        write output data using (XDMF+HDF5)
 
-          if(time%100 == 0) 
+          if(time%10 == 0) 
           {
             writeMesh(NX, NY, NZ, time, rho);
           }
