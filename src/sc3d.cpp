@@ -14,6 +14,8 @@
       #include <cmath>        // pow()
       #include <ctime>        // clock_t, clock(), CLOCKS_PER_SEC
 
+//    writes data to output files using XDMF + HDF5 format
+
       extern void writeMesh(const int      NX, 
                             const int      NY, 
                             const int      NZ, 
@@ -28,6 +30,8 @@
         const double rho0 = 1.0;
         return rho0 * (1 - pow(E, -x/rho0));
       }
+
+//    function to initialize density, velocity and PDFs
 
       void initialize(const int NX, const int NY, const int NZ,
                       const double rhoAvg,
@@ -83,6 +87,8 @@
         }
       }
 
+//    function to stream PDFs to neighboring lattice points
+
       void streaming(const int NX, const int NY, const int NZ,
                      double* ex, double* ey, double* ez, double tau,
                      double* f, double* f_new, double* f_eq)
@@ -120,6 +126,8 @@
           }
         }
       }
+
+//    calculate the change in momentum because of inter-particle forces
 
       void calc_dPdt(const int NX, const int NY, const double NZ,
                      double* ex, double* ey, double* ez, double* G11,
@@ -166,6 +174,8 @@
         }
       }
 
+//    calculate the density and velocity at all nodes
+
       void updateDensityAndVelocity(const int NX, const int NY, const int NZ,
                                     double* ex, double* ey, double* ez, double* wt,
                                     double tau,
@@ -196,8 +206,6 @@
               u[N] = fex_sum / rho[N] + tau * dPdt_x[N] / rho[N];
               v[N] = fey_sum / rho[N] + tau * dPdt_y[N] / rho[N];
               w[N] = fez_sum / rho[N] + tau * dPdt_z[N] / rho[N];
-
-           // printf("rho = %f, u = %f, v = %f, w = %f\n",rho[N],u[N],v[N],w[N]);
             }
           }
         }
@@ -269,6 +277,8 @@
         rho[NX*NY*NZ-1] = rho[0];
       }
 
+//    update equilibrium PDFs based on the latest {rho,u,v,w}
+
       void updateEquilibrium(const int NX, const int NY, const int NZ,
                              double* ex, double* ey, double* ez, double* wt,
                              const double* rho, 
@@ -295,6 +305,8 @@
           }
         }
       }
+
+//    main program
 
       int main(void)
       {
@@ -334,7 +346,7 @@
                               1./36., 1./36., 1./36., 1./36., 1./36., 1./36.,
                               1./36., 1./36., 1./36., 1./36., 1./36., 1./36., };
 
-//      cohesive force
+//      cohesive force along various lattice directions
 
         double G11[] = {0, GEE11, GEE11, GEE11, GEE11, GEE11, GEE11,
                            GEE11/2, GEE11/2, GEE11/2, GEE11/2,
@@ -367,7 +379,10 @@
         t0 = clock();
 
 //      write initial condition to output files
+
         writeMesh(NX, NY, NZ, time, rho);
+
+//      time integration loop
 
         while(time < 2000)
         {

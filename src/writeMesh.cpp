@@ -42,14 +42,14 @@ void writeMesh(const int      NX,
     ss << std::setw(6) << std::setfill('0') << time;   
 
     // create HDF5 files to store heavy data (mesh --> x y z coordinates of voxel vertices)
-    //                                       (attribute --> voxel color)
+    //                                       (attribute --> fluid density, rho)
 
     hid_t   file_id, dataset;      // file and dataset handles
     hid_t   datatype, dataspace;   // handles
     hsize_t dimsf[1];              // dataset dimensions
     herr_t  status;
 
-    // we will write (contiguous) 1D array data for both the mesh and for the attribute (voxel color)
+    // we will write (contiguous) 1D array data for both the mesh and for the attribute (rho)
     const int RANK = 1;
 
     std::string hdf5_file_with_path = "../out/hdf5/data_" + ss.str() + ".h5";
@@ -125,12 +125,6 @@ void writeMesh(const int      NX,
     {
         std::cout << "ERROR: could not open file for writing XDMF output!" << std::endl;
     }
-
-    // each process writes mesh and attribute information about its own specific jurisdiction
-    // these pieces can be combined together later to create a "global" XDMF file for the entire geometry
-
-    // depending on which compile time flag is enabled in the Makefile, the XDMF syntax points to the "heavy data"
-    // in binary or hdf5 format
 
     XDMF << "    <Grid Name=\"mesh " << ss.str() << "\" GridType=\"Uniform\">\n";
     XDMF << "        <Topology TopologyType=\"3DSMesh\" NumberOfElements=\"" << NZ << " " << NY << " " << NX << "\" >\n";
