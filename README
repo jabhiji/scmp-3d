@@ -1,0 +1,3 @@
+This code implements the Shan and Chen (1993) model for a 3D, periodic domain.
+
+Output is written to files using XDMF/HDF5 format and can be visualized using ParaView.
