@@ -14,6 +14,12 @@
       #include <cmath>        // pow()
       #include <ctime>        // clock_t, clock(), CLOCKS_PER_SEC
 
+      extern void writeMesh(const int      NX, 
+                            const int      NY, 
+                            const int      NZ, 
+                            const int      time,
+                            const double*  rho);
+
 //    funtion to calculate effective density in the Shan & Chen model
 
       double psi(double x)
@@ -292,9 +298,9 @@
       {
 //      lattice size
 
-        const int NX = 32;         // number of lattice points along X
-        const int NY = 32;         // number of lattice points along Y
-        const int NZ = 32;         // number of lattice points along Z
+        const int NX = 64;         // number of lattice points along X
+        const int NY = 64;         // number of lattice points along Y
+        const int NZ = 64;         // number of lattice points along Z
 
         // domain size in lattice units
         // grid spacing is unity along X and Y
@@ -358,7 +364,10 @@
         clock_t t0, tN;
         t0 = clock();
 
-        while(true)
+//      write initial condition to output files
+        writeMesh(NX, NY, NZ, time, rho);
+
+        while(time < 1000)
         {
           time++; // increment lattice time
 
@@ -380,18 +389,18 @@
 
 //        write output data using (XDMF+HDF5)
 
-          if(time%10 == 0) 
+          if(time%100 == 0) 
           {
-            // TODO
+            writeMesh(NX, NY, NZ, time, rho);
           }
 
 //        calculate the number of lattice time-steps per second
 
           tN = clock() - t0;
 
-          std::cout << " lattice time steps per second = " 
-                    << (float) CLOCKS_PER_SEC * time / (float) tN 
-                    << std::endl;
+//        std::cout << " lattice time steps per second = " 
+//                  << (float) CLOCKS_PER_SEC * time / (float) tN 
+//                  << std::endl;
         }
 
 //      clean up
